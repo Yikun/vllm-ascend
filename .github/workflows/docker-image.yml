@@ -51,6 +51,15 @@ jobs:
         sudo apt-get clean
         
         df -h
+
+    - name: Publish - Login to GitHub Container Registry
+      if: ${{ inputs.publish }}
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Build - Set up QEMU
       uses: docker/setup-qemu-action@v2
       # https://github.com/docker/setup-qemu-action/issues/198
@@ -63,8 +72,8 @@ jobs:
     - name: Build - Build the base image
       uses: docker/build-push-action@v3
       with:
-        context: ${{ env.BASE_IMAGE_PATH }}
-        tags: ${{ env.BASE_IMAGE_URL }}
+        tags: ghcr.io/yikun/vllm-ascend:dev
         platforms: linux/amd64,linux/arm64
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        push: true
