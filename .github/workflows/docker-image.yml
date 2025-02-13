@@ -10,7 +10,7 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -53,6 +53,9 @@ jobs:
         df -h
     - name: Build - Set up QEMU
       uses: docker/setup-qemu-action@v2
+      # https://github.com/docker/setup-qemu-action/issues/198
+      with:
+        image: tonistiigi/binfmt:qemu-v7.0.0-28
 
     - name: Build - Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
