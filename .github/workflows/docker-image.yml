@@ -16,11 +16,9 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Build - Set up QEMU
-      if: ${{ inputs.build }}
       uses: docker/setup-qemu-action@v2
 
     - name: Build - Set up Docker Buildx
-      if: ${{ inputs.build }}
       uses: docker/setup-buildx-action@v2
 
     - name: Build - Build the base image
@@ -29,3 +27,5 @@ jobs:
         context: ${{ env.BASE_IMAGE_PATH }}
         tags: ${{ env.BASE_IMAGE_URL }}
         platforms: linux/amd64,linux/arm64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
