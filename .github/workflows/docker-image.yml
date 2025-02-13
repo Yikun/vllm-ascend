@@ -53,7 +53,6 @@ jobs:
         df -h
 
     - name: Publish - Login to GitHub Container Registry
-      if: ${{ inputs.publish }}
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
