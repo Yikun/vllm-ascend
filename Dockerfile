@@ -35,6 +35,6 @@ RUN git clone --depth 1 $VLLM_REPO /workspace/vllm
 RUN VLLM_TARGET_DEVICE="empty" python3 -m pip install /workspace/vllm/
 
 # Install vllm-ascend main
-RUN python3 -m pip install /workspace/vllm-ascend/
+RUN python3 -m pip install /workspace/vllm-ascend/ -f https://download.pytorch.org/whl/torch/
 
 CMD ["/bin/bash"]
