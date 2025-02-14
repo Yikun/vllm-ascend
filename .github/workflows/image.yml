@@ -1,0 +1,132 @@
+name: 'image'
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+      - '*-dev'
+    paths:
+      - '.github/workflows/build_image.yml'
+      - '.github/workflows/publish_image.yml'
+      - '.github/workflows/image.yml'
+      - 'Dockerfile'
+      - 'vllm_ascend/**'
+  push:
+    # Publish image when tagging, the Dockerfile in tag will be build as tag image
+    branches:
+      - 'main'
+      - '*-dev'
+    tags:
+      - 'v*'
+    paths:
+      - '.github/workflows/build_image.yml'
+      - '.github/workflows/publish_image.yml'
+      - '.github/workflows/image.yml'
+      - 'Dockerfile'
+      - 'vllm_ascend/**'
+jobs:
+
+  build:
+    name: vllm-ascend image
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Prepare
+      run: |
+        REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+        echo "REPO_OWNER=${REPO_OWNER}" >> "$GITHUB_ENV"
+
+    - name: Print
+      run: |
+        echo "REPO_OWNER:""${REPO_OWNER}"
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        # TODO(yikun): add more hub image and a note on release policy for container image
+        # The REPO_OWNER will be:
+        # - `vllm-project` in usptream repo
+        # - lowercase github user in your fork repo
+        images: |
+          ghcr.io/${{ env.REPO_OWNER }}/vllm-ascend
+        # Note for test case
+        # https://github.com/marketplace/actions/docker-metadata-action#typeref
+        # 1. branch job pulish per main/*-dev branch commits
+        # 2. main and dev pull_request only build is unimportant
+        # 3. tag: v0.7.1rc1 --> v0.7.1rc1, v0.7.1 --> v0.7.1, v0.7.1rc1.dev1 --> v0.7.1rc1.dev1
+        #    (follow the rule from vLLM with prefix v)
+        tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=ref,event=tag
+
+    - name: Free up disk space
+      run: |
+        # Copy from https://github.com/apache/spark/blob/d6ad7798a9f77b611edb8d9f8648f726fcaa6938/dev/free_disk_space
+        # It's a work around for Github Action "No space left on device"
+        echo "=================================="
+        echo "Free up disk space on CI system"
+        echo "=================================="
+        
+        echo "Listing top 100 largest packages (from large to small)"
+        printf "Installed-Size\tPackage\n"
+        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n -r | head -n 100
+        df -h
+        
+        echo "Removing large packages"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf /usr/share/php/
+        sudo rm -rf /usr/local/graalvm/
+        sudo rm -rf /usr/local/.ghcup/
+        sudo rm -rf /usr/local/share/powershell
+        sudo rm -rf /usr/local/share/chromium
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/local/lib/node_modules
+
+        sudo rm -rf /opt/az
+        sudo rm -rf /opt/hostedtoolcache/CodeQL
+        sudo rm -rf /opt/hostedtoolcache/go
+        sudo rm -rf /opt/hostedtoolcache/node
+
+        sudo apt-get remove --purge -y '^aspnet.*'
+        sudo apt-get remove --purge -y '^dotnet-.*'
+        sudo apt-get remove --purge -y '^llvm-.*'
+        sudo apt-get remove --purge -y 'php.*'
+        sudo apt-get remove --purge -y '^mongodb-.*'
+        sudo apt-get remove --purge -y snapd google-chrome-stable microsoft-edge-stable firefox
+        sudo apt-get remove --purge -y azure-cli google-cloud-sdk mono-devel powershell libgl1-mesa-dri
+        sudo apt-get autoremove --purge -y
+        sudo apt-get clean
+
+        df -h
+
+    - name: Build - Set up QEMU
+      uses: docker/setup-qemu-action@v2
+      # TODO(yikun): remove this after https://github.com/docker/setup-qemu-action/issues/198 resolved
+      with:
+        image: tonistiigi/binfmt:qemu-v7.0.0-28
+
+    - name: Build - Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Publish - Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    # TODO(yikun): add tags for more hubs
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        platforms: linux/amd64,linux/arm64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        # only trigger when tag, branch/main push
+        push: ${{ github.event_name != 'pull_request' }}
+        labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ steps.meta.outputs.tags }}
