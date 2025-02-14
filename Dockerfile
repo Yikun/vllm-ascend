@@ -37,4 +37,7 @@ RUN VLLM_TARGET_DEVICE="empty" python3 -m pip install /workspace/vllm/
 # Install vllm-ascend main
 RUN python3 -m pip install /workspace/vllm-ascend/ -f https://download.pytorch.org/whl/torch/
 
+# Install modelscope
+RUN python3 -m pip install modelscope
+
 CMD ["/bin/bash"]
