@@ -62,6 +62,7 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{raw}}
+            type=pep440,pattern={{raw}}
 
     - name: Free up disk space
       run: |
