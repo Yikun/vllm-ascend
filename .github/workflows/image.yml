@@ -41,6 +41,7 @@ jobs:
     - name: Print
       run: |
         echo "REPO_OWNER:""${REPO_OWNER}"
+        lscpu
 
     - name: Docker meta
       id: meta
