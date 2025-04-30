@@ -33,7 +33,9 @@ WORKDIR /workspace
 
 COPY . /workspace/vllm-ascend/
 
-RUN ls -la
+RUN pwd
+
+RUN ls -la vllm-ascend/
 
 RUN pip config set global.index-url ${PIP_INDEX_URL}
 
