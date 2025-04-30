@@ -87,6 +87,6 @@ jobs:
         push: ${{ github.event_name == 'push' && github.repository_owner == 'vllm-project' }}
         labels: ${{ steps.meta.outputs.labels }}
         tags: ${{ steps.meta.outputs.tags }}
+        context: .
         build-args: |
           PIP_INDEX_URL=https://pypi.org/simple
-          BUILDKIT_CONTEXT_KEEP_GIT_DIR=true
