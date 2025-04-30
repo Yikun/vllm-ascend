@@ -42,6 +42,7 @@ jobs:
     - name: Print
       run: |
         lscpu
+        ls -la
 
     - name: Docker meta
       id: meta
