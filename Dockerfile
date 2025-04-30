@@ -33,6 +33,8 @@ WORKDIR /workspace
 
 COPY . /workspace/vllm-ascend/
 
+RUN ls -la
+
 RUN pip config set global.index-url ${PIP_INDEX_URL}
 
 # Install vLLM
