@@ -24,11 +24,6 @@ ARG COMPILE_CUSTOM_KERNELS=1
 ENV DEBIAN_FRONTEND=noninteractive
 ENV COMPILE_CUSTOM_KERNELS=${COMPILE_CUSTOM_KERNELS}
 
-RUN apt-get update -y && \
-    apt-get install -y python3-pip git vim wget net-tools gcc g++ cmake libnuma-dev && \
-    rm -rf /var/cache/apt/* && \
-    rm -rf /var/lib/apt/lists/*
-
 WORKDIR /workspace
 
 COPY . /workspace/vllm-ascend/
