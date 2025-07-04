@@ -36,7 +36,7 @@ on:
       - '.github/workflows/matchers/actionlint.json'
   pull_request:
     branches:
-      - 'main'
+      - 'pr_update'
       - '*-dev'
     paths:
       - '*.txt'
@@ -203,7 +203,6 @@ jobs:
         if: ${{ github.event_name == 'pull_request' && matrix.vllm_version == 'main' }}
         env:
           GH_TOKEN: ${{ github.token }}
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           pwd
           ls $GITHUB_WORKSPACE/../../

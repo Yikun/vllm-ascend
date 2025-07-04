@@ -2,7 +2,7 @@
 
 set -eux
 
-# ensure 2 argument is passed
+# ensure 2 argument is passed.
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <pr_number> <new_message>"
     exit 1
