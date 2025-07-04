@@ -36,7 +36,7 @@ on:
       - '.github/workflows/matchers/actionlint.json'
   pull_request:
     branches:
-      - 'main'
+      - 'pr_update'
       - '*-dev'
     paths:
       - '*.txt'
