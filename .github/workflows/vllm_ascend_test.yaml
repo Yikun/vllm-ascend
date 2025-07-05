@@ -177,7 +177,7 @@ jobs:
         uses: actions/checkout@v4
 
   updatepr:
-    uses: ./.github/workflows/format_pr_body.yml
+    uses: ./.github/workflows/format_pr_body.yaml
     with:
       append-body: "xxxxx"
 
