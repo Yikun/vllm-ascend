@@ -176,15 +176,11 @@ jobs:
       - name: Checkout vllm-project/vllm-ascend repo
         uses: actions/checkout@v4
 
-      - uses: tzkhan/pr-update-action@v2
+      - name: Update PR Description
+        uses: nefrob/pr-description@v1.2.0
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          title-template: '[%headbranch%] '
-          body-template: |
-            Merging into '%basebranch%'
-            [Link to %headbranch%](https://url/to/browse/ticket/%headbranch%)
-          body-update-action: 'suffix'
-          body-uppercase-base-match: false
+            content: "Hello there!"
+            token: ${{ secrets.GITHUB_TOKEN }}
 
   updatepr:
     uses: ./.github/workflows/format_pr_body.yaml
