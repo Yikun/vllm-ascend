@@ -19,7 +19,7 @@ cp "${OLD}" "${NEW}"
 
 # Remove "FIX #xxxx (*link existing issues this PR will resolve*)"
 sed -i '/<!--/,/-->/d' "${NEW}"
-sed -i '/- vLLM: .*$/d' "${NEW}"
+sed -i '/- vLLM .*$/d' "${NEW}"
 echo "- vLLM version: $VLLM_VERSION" >> "${NEW}"
 echo "- vLLM main: $VLLM_COMMIT" >> "${NEW}"
 
