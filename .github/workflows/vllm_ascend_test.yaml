@@ -179,8 +179,6 @@ jobs:
       - uses: tzkhan/pr-update-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          base-branch-regex: '[a-z\d-_.\\/]+'
-          head-branch-regex: 'foo-\d+'
           title-template: '[%headbranch%] '
           body-template: |
             Merging into '%basebranch%'
