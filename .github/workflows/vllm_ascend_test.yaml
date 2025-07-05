@@ -180,7 +180,7 @@ jobs:
         uses: nefrob/pr-description@v1.2.0
         with:
             content: "Hello there!"
-            token: ${{ secrets.GITHUB_TOKEN }}
+            token: ${{ secrets.PR_TOKEN }}
 
   updatepr:
     uses: ./.github/workflows/format_pr_body.yaml
