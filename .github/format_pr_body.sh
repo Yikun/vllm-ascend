@@ -9,7 +9,8 @@ if [ "$#" -ne 3 ]; then
 fi
 
 PR_NUMBER=$1
-NEW_MESSAGE=$2
+VLLM_VERSION=$2
+VLLM_COMMIT=$3
 OLD=/tmp/orig_pr_body.txt
 NEW=/tmp/new_pr_body.txt
 
@@ -19,8 +20,8 @@ cp "${OLD}" "${NEW}"
 # Remove "FIX #xxxx (*link existing issues this PR will resolve*)"
 sed -i '/<!--/,/-->/d' "${NEW}"
 sed -i '/- vLLM: .*$/d' "${NEW}"
-echo "- vLLM version: $NEW_MESSAGE" >> "${NEW}"
-echo "- vLLM main: $NEW_MESSAGE" >> "${NEW}"
+echo "- vLLM version: $VLLM_VERSION" >> "${NEW}"
+echo "- vLLM main: $VLLM_COMMIT" >> "${NEW}"
 
 # Run this only if ${NEW} is different than ${OLD}
 if ! cmp -s "${OLD}" "${NEW}"; then
