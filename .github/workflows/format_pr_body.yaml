@@ -1,7 +1,6 @@
 name: Cleanup PR Body
 
 on:
-
   workflow_call:
     inputs:
       append-body:
