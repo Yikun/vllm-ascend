@@ -1,6 +1,7 @@
-name: Cleanup PR Body
+name: format / pr body
 
 on:
+  # The PR updated when PR opened and push new commits
   pull_request_target:
     types: [opened, synchronize]
 
@@ -9,6 +10,7 @@ permissions:
 
 jobs:
   update-description:
+    name: update vLLM version
     runs-on: ubuntu-latest
 
     steps:
