@@ -177,7 +177,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Format PR body
-        uses: ./.github/workflows/format_pr_body.yaml@main
+        uses: ./.github/workflows/format_pr_body.yml
         with:
           append-body: "${{ env.VLLM_COMMIT_URL }}"
 
