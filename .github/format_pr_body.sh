@@ -41,8 +41,10 @@ sed -i '/- vLLM .*$/d' "${NEW}"
     echo ""
     echo "- vLLM version: $VLLM_VERSION"
     echo "- vLLM main: $VLLM_COMMIT"
-    echo ""
 } >> "${NEW}"
+
+# Remove redundant empty lines
+uniq "${NEW}" | tee "${NEW}"
 
 # Run this only if ${NEW} is different than ${OLD}
 if ! cmp -s "${OLD}" "${NEW}"; then
