@@ -32,17 +32,20 @@ OLD=/tmp/orig_pr_body.txt
 NEW=/tmp/new_pr_body.txt
 
 gh pr view --json body --template "{{.body}}" "${PR_NUMBER}" > "${OLD}"
+# Remove redundant empty lines
 cp "${OLD}" "${NEW}"
 
 # Remove notes in pr description and add vLLM version and commit
 sed -i '/<!--/,/-->/d' "${NEW}"
 sed -i '/- vLLM .*$/d' "${NEW}"
+uniq "${NEW}" | tee "${NEW}"
 {
     echo ""
     echo "- vLLM version: $VLLM_VERSION"
     echo "- vLLM main: $VLLM_COMMIT"
-    echo ""
 } >> "${NEW}"
+# Remove redundant empty lines
+uniq "${NEW}" | tee "${NEW}"
 
 # Run this only if ${NEW} is different than ${OLD}
 if ! cmp -s "${OLD}" "${NEW}"; then
