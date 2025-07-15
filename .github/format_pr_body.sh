@@ -45,7 +45,7 @@ sed -i '/- vLLM .*$/d' "${NEW}"
 } >> "${NEW}"
 
 # Remove redundant empty lines
-sed -i '/^$/N;/^\n$/D' "${NEW}"
+sed -i '' '/^$/N;/^\n$/D' "${NEW}"
 
 # Run this only if ${NEW} is different than ${OLD}
 if ! cmp -s "${OLD}" "${NEW}"; then
