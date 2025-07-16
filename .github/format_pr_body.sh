@@ -47,6 +47,9 @@ uniq "${NEW}" | tee "${NEW}"
 # Remove redundant empty lines
 uniq "${NEW}" | tee "${NEW}"
 
+# Remove redundant empty lines
+cat -s "${NEW}" | tee "${NEW}"
+
 # Run this only if ${NEW} is different than ${OLD}
 if ! cmp -s "${OLD}" "${NEW}"; then
     echo
