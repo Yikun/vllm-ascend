@@ -39,10 +39,10 @@ uniq "${OLD}" > "${NEW}"
 sed -i '/<!--/,/-->/d' "${NEW}"
 sed -i '/- vLLM .*$/d' "${NEW}"
 {
-    echo ""
+    echo -e "\n"
     echo "- vLLM version: $VLLM_VERSION"
     echo "- vLLM main: $VLLM_COMMIT"
-    echo ""
+    echo -e "\n"
 } >> "${NEW}"
 
 # Run this only if ${NEW} is different than ${OLD}
